@@ -16,7 +16,16 @@ def main():
         choice = input("Wähle eine Option: ")
 
         if choice == "1":
-            lib.list_titles()  # Liste aller Titel anzeigen
+            titles = lib.list_titles()
+            if not titles:
+                print("📚 Die Bibliothek ist leer.")
+            else:
+                print("\n📚 Aktuelle Bibliothek:")
+                print("-" * 60)
+                for t in titles:
+                    print(f"ID: {t.id} | {t.artist} - {t.name} ({t.year}) [{t.genre}]")
+                print("-" * 60)
+
 
         elif choice == "2":
             name = input("Titelname: ")

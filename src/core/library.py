@@ -8,11 +8,32 @@ class Library:
         self.filepath = Path(filepath)
         self.titles: List[Title] = []
 
-    def load(self):
+    def list_titles(self):
+        return self.titles
+
+    def _find_index_by_id(self, title_id: int):
+        for i, t in enumerate(self.titles):
+            if t.id == title_id:
+                return i
+        return None
+
+    def _load_file(self):
         if self.filepath.exists():
             with open(self.filepath, "r", encoding="utf-8") as f:
-                data = json.load(f)
-                self.titles = [Title(**t) for t in data]
+                return json.load(f)
+        return []
+
+    def _save_file(self, data):
+        with open(self.filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
+
+    def _refresh_titles_from_data(self, data):
+        self.titles = [Title(**t) for t in data]
+
+    def load(self):
+        data = self._load_file()
+        if data:
+            self._refresh_titles_from_data(data)
             return {"success": True, "count": len(self.titles)}
         else:
             self.titles = []
@@ -25,68 +46,31 @@ class Library:
             else:
                 title.id = 1
 
-        # Titel zur Bibliothek hinzufügen
         self.titles.append(title)
-
-        # Alle Titel als JSON speichern
         data = [t.to_dict() for t in self.titles]
-        with open(self.filepath, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=4)
+        self._save_file(data)
 
         return {"success": True, "count": len(self.titles), "title": title.to_dict()}
 
     def update_title(self, title_id: int, **kwargs):
-        # Datei laden
-        with open(self.filepath, "r", encoding="utf-8") as f:
-            data = json.load(f)
+        index = self._find_index_by_id(title_id)
+        title_dict = self.titles[index].to_dict()
 
-        # Titel mit passender ID finden
-        found = None
-        for i, t in enumerate(data):
-            if t["id"] == title_id:
-                found = i
-                break
-
-        # First search the JSON and 
         for key, value in kwargs.items():
-            data[found][key] = value
+            title_dict[key] = value
 
-        # Datei neu speichern
-        with open(self.filepath, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=4)
+        self.titles[index] = Title(**title_dict)
+        data = [t.to_dict() for t in self.titles]
+        self._save_file(data)
 
-        # Titelobjekte im Speicher aktualisieren
-        self.titles = [Title(**t) for t in data]
-
-        # Geänderten Titel zurückgeben
-        return {"success": True, "title": data[found]}
+        return {"success": True, "title": self.titles[index].to_dict()}
 
     def delete_title(self, title_id: int):
-        # Datei laden
-        with open(self.filepath, "r", encoding="utf-8") as f:
-            data = json.load(f)
+        data = self._load_file()
+        index = self._find_index_by_id(title_id)
 
-        # Titel mit passender ID finden
-        found = None
-        for i, t in enumerate(data):
-            if t["id"] == title_id:
-                found = i
-                break
-
-        # Titel suchen
-        found = None
-        for i, t in enumerate(data):
-            if t["id"] == title_id:
-                found = i
-            break
-        # Titel löschen
-        deleted_title = data.pop(found)
-
-        # Datei speichern
-        with open(self.filepath, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=4)
-
-        # interne Liste aktualisieren
-        self.titles = [Title(**t) for t in data]
+        deleted_title = data.pop(index)
+        self._save_file(data)
+        self._refresh_titles_from_data(data)
 
         return {"success": True, "title": deleted_title}
