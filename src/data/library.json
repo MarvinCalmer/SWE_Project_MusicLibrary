@@ -1,18 +1,10 @@
 [
     {
         "id": 1,
-        "name": "Imagine",
-        "artist": "John Lennon",
-        "album": "Imagine",
-        "year": 1972,
-        "genre": "Pop"
-    },
-    {
-        "id": 2,
-        "name": "Imagine",
-        "artist": "John Lennon",
-        "album": "Imagine",
-        "year": 1971,
-        "genre": "Rock"
+        "name": "TestName",
+        "artist": "Ich",
+        "album": "absfjkl",
+        "year": 2999,
+        "genre": "lkjkj"
     }
 ]

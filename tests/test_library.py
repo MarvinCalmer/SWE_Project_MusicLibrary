@@ -60,3 +60,31 @@ def test_update_title(tmp_path):
     assert data[0]["id"] == title_id
     assert data[0]["genre"] == "Pop"
     assert data[0]["year"] == 1972
+    
+def test_delete_title(tmp_path):
+    file_path = tmp_path / "library.json"
+    lib = Library(filepath=file_path)
+
+    # Zwei Titel hinzufügen
+    t1 = Title(name="Imagine", artist="John Lennon", album="Imagine", year=1971, genre="Rock")
+    t2 = Title(name="Hey Jude", artist="The Beatles", album="Single", year=1968, genre="Pop")
+    result1 = lib.add_title(t1)
+    result2 = lib.add_title(t2)
+
+    # IDs aus Rückgabe holen
+    id1 = result1["title"]["id"]
+    id2 = result2["title"]["id"]
+
+    # Löschen
+    result = lib.delete_title(id1)
+
+    # Rückgabewerte prüfen
+    assert result["success"] is True
+
+    # Prüfen: Dateiinhalt
+    with open(file_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    assert len(data) == 1
+    assert data[0]["id"] == id2
+    assert data[0]["name"] == "Hey Jude"

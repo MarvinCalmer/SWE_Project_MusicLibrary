@@ -61,9 +61,32 @@ class Library:
         # Geänderten Titel zurückgeben
         return {"success": True, "title": data[found]}
 
+    def delete_title(self, title_id: int):
+        # Datei laden
+        with open(self.filepath, "r", encoding="utf-8") as f:
+            data = json.load(f)
 
-"""  
+        # Titel mit passender ID finden
+        found = None
+        for i, t in enumerate(data):
+            if t["id"] == title_id:
+                found = i
+                break
 
-    def edit_title(self, title_id: int, **kwargs):
+        # Titel suchen
+        found = None
+        for i, t in enumerate(data):
+            if t["id"] == title_id:
+                found = i
+            break
+        # Titel löschen
+        deleted_title = data.pop(found)
 
-    def delete_title(self, title_id: int): """
+        # Datei speichern
+        with open(self.filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
+
+        # interne Liste aktualisieren
+        self.titles = [Title(**t) for t in data]
+
+        return {"success": True, "title": deleted_title}
