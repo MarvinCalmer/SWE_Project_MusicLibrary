@@ -7,6 +7,7 @@ class Library:
     def __init__(self, filepath="library.json"):
         self.filepath = Path(filepath)
         self.titles: List[Title] = []
+        self.load()
 
     def list_titles(self):
         return self.titles
@@ -21,6 +22,7 @@ class Library:
         if self.filepath.exists():
             with open(self.filepath, "r", encoding="utf-8") as f:
                 return json.load(f)
+                self.titles = [Title(**t) for t in data]
         return []
 
     def _save_file(self, data):
@@ -29,6 +31,32 @@ class Library:
 
     def _refresh_titles_from_data(self, data):
         self.titles = [Title(**t) for t in data]
+
+    def search_library(self, **kwargs):
+        # Ergebnisse filtern
+        filtered = []
+        for title in self.titles:
+            match = True
+            for key, value in kwargs.items():
+                # Prüfen, ob das Attribut existiert
+                if not hasattr(title, key):
+                    match = False
+                    break
+                # Vergleich (case-insensitive für Strings)
+                attr = getattr(title, key)
+                if isinstance(attr, str) and isinstance(value, str):
+                    if value.lower() not in attr.lower():
+                        match = False
+                        break
+                else:
+                    if attr != value:
+                        match = False
+                        break
+            if match:
+                filtered.append(title)
+        filtered.sort(key=lambda t: getattr(t, 'name', str(t)))  
+
+        return {"success": True, "count": len(filtered), "results": [t.to_dict() for t in filtered]}
 
     def load(self):
         data = self._load_file()

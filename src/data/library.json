@@ -1,10 +1,82 @@
 [
     {
         "id": 1,
-        "name": "TestName",
-        "artist": "Ich",
-        "album": "absfjkl",
-        "year": 2999,
-        "genre": "lkjkj"
+        "name": "Shape of You",
+        "artist": "Ed Sheeran",
+        "album": "Divide",
+        "year": 2017,
+        "genre": "Test"
+    },
+    {
+        "id": 2,
+        "name": "Blinding Lights",
+        "artist": "The Weeknd",
+        "album": "After Hours",
+        "year": 2019,
+        "genre": "R&B"
+    },
+    {
+        "id": 3,
+        "name": "Bad Guy",
+        "artist": "Billie Eilish",
+        "album": "When We All Fall Asleep",
+        "year": 2019,
+        "genre": "Pop"
+    },
+    {
+        "id": 4,
+        "name": "Levitating",
+        "artist": "Dua Lipa",
+        "album": "Future Nostalgia",
+        "year": 2020,
+        "genre": "Pop"
+    },
+    {
+        "id": 5,
+        "name": "Watermelon Sugar",
+        "artist": "Harry Styles",
+        "album": "Fine Line",
+        "year": 2019,
+        "genre": "Pop"
+    },
+    {
+        "id": 6,
+        "name": "Circles",
+        "artist": "Post Malone",
+        "album": "Hollywood's Bleeding",
+        "year": 2019,
+        "genre": "Hip-Hop"
+    },
+    {
+        "id": 7,
+        "name": "Dance Monkey",
+        "artist": "Tones and I",
+        "album": "The Kids Are Coming",
+        "year": 2019,
+        "genre": "Pop"
+    },
+    {
+        "id": 8,
+        "name": "Senorita",
+        "artist": "Shawn Mendes",
+        "album": "Shawn Mendes",
+        "year": 2019,
+        "genre": "Pop"
+    },
+    {
+        "id": 9,
+        "name": "Someone You Loved",
+        "artist": "Lewis Capaldi",
+        "album": "Divinely Uninspired to a Hellish Extent",
+        "year": 2019,
+        "genre": "Pop"
+    },
+    {
+        "id": 10,
+        "name": "Bad Habits",
+        "artist": "Ed Sheeran",
+        "album": "=",
+        "year": 2021,
+        "genre": "Pop"
     }
 ]

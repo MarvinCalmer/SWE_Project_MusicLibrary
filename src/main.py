@@ -2,8 +2,7 @@ from core.library import Library
 from core.title import Title
 
 def main():
-    file_path = "src/data/library.json"
-    lib = Library(filepath=file_path)
+    lib = Library(filepath="src/data/library.json")
 
     while True:
         print("\n=== Musikbibliothek Menü ===")
@@ -11,7 +10,8 @@ def main():
         print("[2] Titel hinzufügen")
         print("[3] Titel bearbeiten")
         print("[4] Titel löschen")
-        print("[5] Beenden")
+        print("[5] Suchen")
+        print("[6] Beenden")
 
         choice = input("Wähle eine Option: ")
 
@@ -70,6 +70,45 @@ def main():
                 print("Ungültige Eingabe!")
 
         elif choice == "5":
+            # Suchkriterien abfragen
+            print("\n🔍 Suche nach Titeln")
+            name = input("Name (Enter überspringen, wenn nicht relevant): ").strip()
+            artist = input("Künstler (Enter überspringen, wenn nicht relevant): ").strip()
+            album = input("Album (Enter überspringen, wenn nicht relevant): ").strip()
+            genre = input("Genre (Enter überspringen, wenn nicht relevant): ").strip()
+            year_input = input("Jahr (Enter überspringen, wenn nicht relevant): ").strip()
+
+            # Suchparameter zusammenstellen
+            search_params = {}
+            if name:
+                search_params["name"] = name
+            if artist:
+                search_params["artist"] = artist
+            if album:
+                search_params["album"] = album
+            if genre:
+                search_params["genre"] = genre
+            if year_input:
+                try:
+                    search_params["year"] = int(year_input)
+                except ValueError:
+                    print("❌ Ungültiges Jahr. Suche ohne Jahr.")
+            
+            # Suche durchführen
+            results = lib.search_library(**search_params)
+
+            # Ergebnisse anzeigen
+            if results["count"] == 0:
+                print("❌ Keine Treffer gefunden.")
+            else:
+                print(f"\n🔎 Gefundene Titel: {results['count']}")
+                print("-" * 60)
+                for t in results["results"]:
+                    print(f"ID: {t['id']} | {t['artist']} - {t['name']} ({t['year']}) [{t['genre']}]")
+                print("-" * 60)
+
+
+        elif choice == "6":
             print("👋 Programm beendet.")
             break
 

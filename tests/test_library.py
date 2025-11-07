@@ -1,6 +1,9 @@
-from core.library import Library
-from core.title import Title
 import json
+
+from src.core.library import Library
+from src.core.title import Title
+
+
 
 def test_library_load_empty(tmp_path):
     lib = Library(filepath=tmp_path / "lib.json")
@@ -88,3 +91,21 @@ def test_delete_title(tmp_path):
     assert len(data) == 1
     assert data[0]["id"] == id2
     assert data[0]["name"] == "Hey Jude"
+
+def test_search_title(tmp_path):
+    file_path = tmp_path / "library.json"
+    lib = Library(filepath=file_path)
+
+    # Zwei Titel hinzufügen
+    t1 = Title(name="Test", artist="John Lennon", album="Imagine", year=1971, genre="Rock")
+    t2 = Title(name="Imagine", artist="John Lennon", album="Imagine", year=1973, genre="Rock")
+    t3 = Title(name="Hey Jude", artist="The Beatles", album="Single", year=1968, genre="Pop")
+    result1 = lib.add_title(t1)
+    result2 = lib.add_title(t2)
+    result3 = lib.add_title(t3)
+
+    result = lib.search_library(artist="Lennon")
+    assert result["success"] is True
+    assert result["count"] == 2
+    assert result["results"][0]["name"] == "Imagine"
+    assert result["results"][1]["name"] == "Test"
