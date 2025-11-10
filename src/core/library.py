@@ -19,11 +19,15 @@ class Library:
         return None
 
     def _load_file(self):
-        if self.filepath.exists():
-            with open(self.filepath, "r", encoding="utf-8") as f:
-                return json.load(f)
-                self.titles = [Title(**t) for t in data]
-        return []
+        if not self.filepath.exists():
+            return None
+        with open(self.filepath, "r", encoding="utf-8") as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                # Datei existiert, aber ist ungültig
+                return []
+        return data
 
     def _save_file(self, data):
         with open(self.filepath, "w", encoding="utf-8") as f:
@@ -54,18 +58,21 @@ class Library:
                         break
             if match:
                 filtered.append(title)
-        filtered.sort(key=lambda t: getattr(t, 'name', str(t)))  
+        filtered.sort(key=lambda t: getattr(t, 'name', str(t)))
 
         return {"success": True, "count": len(filtered), "results": [t.to_dict() for t in filtered]}
 
     def load(self):
         data = self._load_file()
-        if data:
-            self._refresh_titles_from_data(data)
-            return {"success": True, "count": len(self.titles)}
-        else:
+        if data is None:
             self.titles = []
             return {"success": False, "error": "File not found"}
+        elif not data:
+            self.titles = []
+            return {"success": False, "error": "File empty"}
+        else:
+            self._refresh_titles_from_data(data)
+            return {"success": True, "count": len(self.titles)}
 
     def add_title(self, title: Title):
         if title.id is None:
