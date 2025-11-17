@@ -5,6 +5,7 @@ from src.core.library import Library
 from src.core.title import Title
 
 library = Library(filepath=Path("src/data/library.json"))
+sort_by_name = False
 
 # Hauptfenster
 root = tk.Tk()
@@ -34,7 +35,7 @@ search_entry.grid(row=0, column=1, padx=5)
 def refresh_listbox(titles=None):
     song_listbox.delete(0, tk.END)
     if titles is None:
-        titles = library.titles
+        titles = library.get_titles()
     for t in titles:
         song_listbox.insert(
             tk.END, f"{t.name} - {t.artist} ({t.album}, {t.year}) [{t.genre}]"
@@ -79,7 +80,7 @@ def delete_title():
         messagebox.showwarning("Hinweis", "Bitte einen Titel auswählen.")
         return
     index = selection[0]
-    title = library.titles[index]
+    title = library.get_titles_by_id(index)
     if messagebox.askyesno("Löschen bestätigen", f"'{title.name}' wirklich löschen?"):
         library.delete_title(title.id)
         refresh_listbox()
@@ -90,7 +91,7 @@ def edit_title():
         messagebox.showwarning("Hinweis", "Bitte einen Titel auswählen.")
         return
     index = selection[0]
-    title = library.titles[index]
+    title = library.get_titles_by_id(index)
 
     name = simpledialog.askstring("Titel bearbeiten", "Neuer Songname:", initialvalue=title.name)
     artist = simpledialog.askstring("Titel bearbeiten", "Neuer Künstler:", initialvalue=title.artist)
@@ -101,18 +102,18 @@ def edit_title():
     library.update_title(title.id, name=name, artist=artist, album=album, year=year, genre=genre)
     refresh_listbox()
 
-sort_by_name = False
+
 
 def sort_titles():
     global sort_by_name
 
     if not sort_by_name:
         # Sortiere nach Name
-        titles_sorted = sorted(library.titles, key=lambda t: t.name.lower())
+        titles_sorted = sorted(library.get_titles(), key=lambda t: t.name.lower())
         sort_by_name = True
     else:
         # Sortiere nach ID
-        titles_sorted = sorted(library.titles, key=lambda t: t.id)
+        titles_sorted = sorted(library.get_titles(), key=lambda t: t.id)
         sort_by_name = False
 
     refresh_listbox(titles_sorted)

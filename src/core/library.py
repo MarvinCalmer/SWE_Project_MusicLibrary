@@ -2,39 +2,27 @@ from pathlib import Path
 import json
 from typing import List
 from .title import Title
+from .abstract_library import AbstractLibrary
 
-class Library:
+class Library(AbstractLibrary):
+    """
+    Concrete implementation of the AbstractLibrary interface.
+    This class manages a collection of Title objects stored in a JSON file.
+    
+    It provides methods for loading, searching, adding, updating, and deleting
+    titles, as well as utility functions for file handling and ID management.
+    """
+
     def __init__(self, filepath="library.json"):
         self.filepath = Path(filepath)
         self.titles: List[Title] = []
         self.load()
 
-    def list_titles(self):
+    def get_titles(self):
         return self.titles
 
-    def _find_index_by_id(self, title_id: int):
-        for i, t in enumerate(self.titles):
-            if t.id == title_id:
-                return i
-        return None
-
-    def _load_file(self):
-        if not self.filepath.exists():
-            return None
-        with open(self.filepath, "r", encoding="utf-8") as f:
-            try:
-                data = json.load(f)
-            except json.JSONDecodeError:
-                # Datei existiert, aber ist ungültig
-                return []
-        return data
-
-    def _save_file(self, data):
-        with open(self.filepath, "w", encoding="utf-8") as f:
-            json.dump(data, f, indent=4)
-
-    def _refresh_titles_from_data(self, data):
-        self.titles = [Title(**t) for t in data]
+    def get_titles_by_id(self,index=None):
+        return self.titles[index]
 
     def search_library(self, **kwargs):
         # Ergebnisse filtern
@@ -72,7 +60,7 @@ class Library:
             return {"success": False, "error": "File empty"}
         else:
             self._refresh_titles_from_data(data)
-            return {"success": True, "count": len(self.titles)}
+            return {"success": True, "count": len(self.titles), "titles": self.get_titles().to_dict()}
 
     def add_title(self, title: Title):
         if title.id is None:
@@ -109,3 +97,27 @@ class Library:
         self._refresh_titles_from_data(data)
 
         return {"success": True, "title": deleted_title}
+
+    def _find_index_by_id(self, title_id: int):
+        for i, t in enumerate(self.titles):
+            if t.id == title_id:
+                return i
+        return None
+
+    def _load_file(self):
+        if not self.filepath.exists():
+            return None
+        with open(self.filepath, "r", encoding="utf-8") as f:
+            try:
+                data = json.load(f)
+            except json.JSONDecodeError:
+                # Datei existiert, aber ist ungültig
+                return []
+        return data
+
+    def _save_file(self, data):
+        with open(self.filepath, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=4)
+
+    def _refresh_titles_from_data(self, data):
+        self.titles = [Title(**t) for t in data]
