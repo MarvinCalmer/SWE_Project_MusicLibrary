@@ -48,19 +48,17 @@ class Library(AbstractLibrary):
                 filtered.append(title)
         filtered.sort(key=lambda t: getattr(t, 'name', str(t)))
 
-        return {"success": True, "count": len(filtered), "results": [t.to_dict() for t in filtered]}
+        return [t.to_dict() for t in filtered]
 
     def load(self):
         data = self._load_file()
         if data is None:
             self.titles = []
-            return {"success": False, "error": "File not found"}
         elif not data:
             self.titles = []
-            return {"success": False, "error": "File empty"}
         else:
             self._refresh_titles_from_data(data)
-            return {"success": True, "count": len(self.titles), "titles": self.get_titles().to_dict()}
+        return self.titles
 
     def add_title(self, title: Title):
         if title.id is None:
@@ -73,7 +71,7 @@ class Library(AbstractLibrary):
         data = [t.to_dict() for t in self.titles]
         self._save_file(data)
 
-        return {"success": True, "count": len(self.titles), "title": title.to_dict()}
+        return title.to_dict()
 
     def update_title(self, title_id: int, **kwargs):
         index = self._find_index_by_id(title_id)
@@ -86,7 +84,7 @@ class Library(AbstractLibrary):
         data = [t.to_dict() for t in self.titles]
         self._save_file(data)
 
-        return {"success": True, "title": self.titles[index].to_dict()}
+        return self.titles[index].to_dict()
 
     def delete_title(self, title_id: int):
         data = self._load_file()
@@ -96,7 +94,7 @@ class Library(AbstractLibrary):
         self._save_file(data)
         self._refresh_titles_from_data(data)
 
-        return {"success": True, "title": deleted_title}
+        return deleted_title
 
     def _find_index_by_id(self, title_id: int):
         for i, t in enumerate(self.titles):

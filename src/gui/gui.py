@@ -50,11 +50,11 @@ def search_titles():
     field = search_field_var.get()
     results = library.search_library(**{field: term})
 
-    if results["count"] == 0:
+    if len(results) == 0:
         messagebox.showinfo("Keine Treffer", "Keine Titel gefunden.")
         refresh_listbox()
     else:
-        found = [Title(**t) for t in results["results"]]
+        found = [Title(**t) for t in results]
         refresh_listbox(found)
 
 # Buttons
@@ -118,7 +118,7 @@ def sort_titles():
 
     refresh_listbox(titles_sorted)
 
-#Buttons 
+#Buttons
 tk.Button(button_frame, text="Add", width=12, command=add_title).grid(row=0, column=0, padx=5)
 tk.Button(button_frame, text="Edit", width=12, command=edit_title).grid(row=0, column=1, padx=5)
 tk.Button(button_frame, text="Delete", width=12, command=delete_title).grid(row=0, column=2, padx=5)
