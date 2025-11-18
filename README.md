@@ -47,14 +47,17 @@ Liste der wichtigsten verwendeten Technologien, Frameworks und Tools:
 # Repository klonen
 git clone https://github.com/MarvinCalmer/SWE_Project_MusicLibrary
 
-# Abhängigkeiten installieren
-pip install pytest
+# pytest installieren
+make install
 
 # Projekt starten
-/usr/local/bin/python3 /Users/marvincalmer/Documents/GitHub/SWE_Project_MusicLibrary/src/main.py
+make run
 
-# Testing
-PYTHONPATH=. pytest
+# Tests ausführen
+make test
+
+# Aufräumen
+make clean
 ```
 
 ---
