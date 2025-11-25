@@ -1,7 +1,14 @@
+PYTHON := $(or \
+    $(shell command -v python3 2>/dev/null), \
+    $(shell command -v python 2>/dev/null), \
+    python3 \
+)
+
 run:
-	PYTHONPATH=. python3 src/gui/gui.py
+	PYTHONPATH=. $(PYTHON) src/gui/gui.py
+
 test:
-	PYTHONPATH=. pytest
+	PYTHONPATH=. $(PYTHON) -m pytest
 
 install:
 	pip install pytest
@@ -11,3 +18,6 @@ clean:
 	find . -type f -name "*.pyc" -delete
 	find . -type d -name "__pycache__" -delete
 	find . -type d -name ".pytest_cache" -delete
+
+freeze:
+	$(PYTHON) -m pip freeze > requirements.txt
