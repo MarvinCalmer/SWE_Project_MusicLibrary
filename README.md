@@ -68,8 +68,20 @@ make install
 # Projekt starten
 make run
 
-# Tests ausführen
+# Standard-Test
 make test
+
+# Tests mit verbose output
+make test-v
+
+# Tests mit detailliertem output und fehlgeschlagenen zuerst
+make test-vv
+
+# Tests mit Coverage-Report
+make test-cov
+
+# Tests mit HTML Coverage-Report
+make test-cov-html
 
 # Aufräumen
 make clean
