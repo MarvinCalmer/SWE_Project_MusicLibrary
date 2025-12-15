@@ -71,4 +71,5 @@ class Title:
             "album": self.album,
             "year": self.year,
             "genre": self.genre,
+            "is_favorite": self.is_favorite
         }
