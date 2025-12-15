@@ -119,3 +119,19 @@ class Library(AbstractLibrary):
 
     def _refresh_titles_from_data(self, data):
         self.titles = [Title(**t) for t in data]
+
+    def toggle_favorite(self, title_id: int) -> bool:
+        index = self._find_index_by_id(title_id)
+        
+        if index is None:
+            raise ValueError(f"Title with ID {title_id} not found")
+        
+        self.titles[index].is_favorite = not self.titles[index].is_favorite
+        
+        data = [t.to_dict() for t in self.titles]
+        self._save_file(data)
+        
+        return self.titles[index].is_favorite
+    
+    def get_favorites(self) -> List[Title]:
+        return [title for title in self.titles if title.is_favorite]
