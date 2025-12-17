@@ -79,4 +79,12 @@
         "year": 2021,
         "genre": "Pop"
     }
+    {
+        "id": 11,
+        "name": "We Are Charlie Kirk",
+        "artist": "Spalexma",
+        "album": "=",
+        "year": 2025,
+        "genre": "Swiss Underground"
+    }
 ]
