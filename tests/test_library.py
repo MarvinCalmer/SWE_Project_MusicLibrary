@@ -283,3 +283,57 @@ def test_search_library_year(tmp_path):
 
     assert len(results) == 1
     assert results[0]["name"] == "Imagine"
+
+def test_title_default_not_favorite(tmp_path):
+    file_path = tmp_path / "lib.json"
+    lib = Library(filepath=file_path)
+    lib.load()
+
+    t = Title(name="Imagine", artist="John Lennon", album="Imagine", year=1971, genre="Rock")
+    lib.add_title(t)
+
+    stored_title = lib.get_titles()[0]
+    assert stored_title.is_favorite is False
+
+    def test_toggle_favorite_sets_favorite(tmp_path):
+        file_path = tmp_path / "lib.json"
+        lib = Library(filepath=file_path)
+        lib.load()
+
+        t = Title(name="Imagine", artist="John Lennon", album="Imagine", year=1971, genre="Rock")
+        result = lib.add_title(t)
+
+        new_status = lib.toggle_favorite(result["id"])
+
+        assert new_status is True
+        assert lib.get_titles()[0].is_favorite is True
+    
+    def test_toggle_favorite_unsets_favorite(tmp_path):
+        file_path = tmp_path / "lib.json"
+        lib = Library(filepath=file_path)
+        lib.load()
+
+        t = Title(name="Song", artist="Artist", album="Album", year=2020, genre="Pop")
+        result = lib.add_title(t)
+
+        lib.toggle_favorite(result["id"])
+        new_status = lib.toggle_favorite(result["id"])
+
+        assert new_status is False
+        assert lib.get_titles()[0].is_favorite is False
+    
+    def test_favorite_persisted_after_reload(tmp_path):
+        file_path = tmp_path / "lib.json"
+
+        lib1 = Library(filepath=file_path)
+        lib1.load()
+
+        t = Title(name="Song", artist="Artist", album="Album", year=2020, genre="Pop")
+        result = lib1.add_title(t)
+        lib1.toggle_favorite(result["id"])
+
+        # neue Instanz = Neustart
+        lib2 = Library(filepath=file_path)
+        titles = lib2.get_titles()
+
+        assert titles[0].is_favorite is True
