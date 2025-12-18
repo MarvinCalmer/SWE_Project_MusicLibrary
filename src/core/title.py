@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class Title:
     """
@@ -28,7 +29,9 @@ class Title:
     year: int
     genre: str
 
-    def __init__(self, id=None, name="", artist="", album="", year=0, genre="",is_favorite=False):
+    def __init__(
+        self, id=None, name="", artist="", album="", year=0, genre="", is_favorite=False
+    ):
         """
         Initialize a Title instance.
 
@@ -71,5 +74,5 @@ class Title:
             "album": self.album,
             "year": self.year,
             "genre": self.genre,
-            "is_favorite": self.is_favorite
+            "is_favorite": self.is_favorite,
         }

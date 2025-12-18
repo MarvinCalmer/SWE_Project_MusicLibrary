@@ -4,11 +4,12 @@ from typing import List
 from .title import Title
 from .abstract_library import AbstractLibrary
 
+
 class Library(AbstractLibrary):
     """
     Concrete implementation of the AbstractLibrary interface.
     This class manages a collection of Title objects stored in a JSON file.
-    
+
     It provides methods for loading, searching, adding, updating, and deleting
     titles, as well as utility functions for file handling and ID management.
     """
@@ -21,7 +22,7 @@ class Library(AbstractLibrary):
     def get_titles(self):
         return self.titles
 
-    def get_titles_by_id(self,index=None):
+    def get_titles_by_id(self, index=None):
         return self.titles[index]
 
     def search_library(self, **kwargs):
@@ -46,7 +47,7 @@ class Library(AbstractLibrary):
                         break
             if match:
                 filtered.append(title)
-        filtered.sort(key=lambda t: getattr(t, 'name', str(t)))
+        filtered.sort(key=lambda t: getattr(t, "name", str(t)))
 
         return [t.to_dict() for t in filtered]
 
@@ -122,16 +123,16 @@ class Library(AbstractLibrary):
 
     def toggle_favorite(self, title_id: int) -> bool:
         index = self._find_index_by_id(title_id)
-        
+
         if index is None:
             raise ValueError(f"Title with ID {title_id} not found")
-        
+
         self.titles[index].is_favorite = not self.titles[index].is_favorite
-        
+
         data = [t.to_dict() for t in self.titles]
         self._save_file(data)
-        
+
         return self.titles[index].is_favorite
-    
+
     def get_favorites(self) -> List[Title]:
         return [title for title in self.titles if title.is_favorite]
