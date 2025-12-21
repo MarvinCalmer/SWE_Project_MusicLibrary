@@ -524,6 +524,58 @@ def delete_playlist():
         refresh_playlist_songs()
 
 
+def export_playlist():
+    """Export the selected playlist to a JSON file."""
+    if current_playlist_id[0] is None:
+        messagebox.showwarning("Hinweis", "Bitte eine Playlist auswählen.")
+        return
+
+    playlist = playlist_manager.get_playlist(current_playlist_id[0])
+
+    # Open file dialog to choose export location
+    from tkinter import filedialog
+
+    default_filename = f"{playlist['name'].replace(' ', '_')}.json"
+
+    filepath = filedialog.asksaveasfilename(
+        title="Playlist exportieren",
+        defaultextension=".json",
+        initialfile=default_filename,
+        filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+    )
+
+    if filepath:
+        try:
+            playlist_manager.export_playlist(current_playlist_id[0], filepath)
+            messagebox.showinfo(
+                "Erfolg", f"Playlist '{playlist['name']}' wurde exportiert."
+            )
+        except Exception as e:
+            messagebox.showerror("Fehler", f"Export fehlgeschlagen: {e}")
+
+
+def import_playlist():
+    """Import a playlist from a JSON file."""
+    from tkinter import filedialog
+
+    filepath = filedialog.askopenfilename(
+        title="Playlist importieren",
+        filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
+    )
+
+    if filepath:
+        try:
+            imported = playlist_manager.import_playlist(filepath)
+            refresh_playlist_list()
+            messagebox.showinfo(
+                "Erfolg", f"Playlist '{imported['name']}' wurde importiert."
+            )
+        except ValueError as e:
+            messagebox.showerror("Fehler", f"Import fehlgeschlagen: {e}")
+        except Exception as e:
+            messagebox.showerror("Fehler", f"Unerwarteter Fehler: {e}")
+
+
 def add_song_to_playlist():
     """Add selected song from library to current playlist."""
     if current_playlist_id[0] is None:
@@ -585,22 +637,33 @@ create_button(playlist_btn_frame, "Löschen", delete_playlist, bg_color="#282828
     fill=tk.X, pady=2
 )
 
+# Separator
+tk.Frame(playlist_btn_frame, bg="#282828", height=1).pack(fill=tk.X, pady=5)
+
+# Import/Export buttons
+create_button(
+    playlist_btn_frame, "Exportieren", export_playlist, bg_color="#282828"
+).pack(fill=tk.X, pady=2)
+create_button(
+    playlist_btn_frame, "Importieren", import_playlist, bg_color="#282828"
+).pack(fill=tk.X, pady=2)
+
 # Library buttons
-create_button(library_btn_frame, "Add", add_title, width=10).pack(side=tk.LEFT, padx=2)
-create_button(library_btn_frame, "Edit", edit_title, bg_color="#282828", width=10).pack(
+create_button(library_btn_frame, "Hinzufügen", add_title, width=10).pack(side=tk.LEFT, padx=2)
+create_button(library_btn_frame, "Editieren", edit_title, bg_color="#282828", width=10).pack(
     side=tk.LEFT, padx=2
 )
 create_button(
-    library_btn_frame, "Delete", delete_title, bg_color="#B91D1D", width=10
+    library_btn_frame, "Löschen", delete_title, bg_color="#B91D1D", width=10
 ).pack(side=tk.LEFT, padx=2)
 create_button(
-    library_btn_frame, "Search", search_titles, bg_color="#282828", width=10
+    library_btn_frame, "Suchen", search_titles, bg_color="#282828", width=10
 ).pack(side=tk.LEFT, padx=2)
 create_button(
-    library_btn_frame, "Sort", sort_titles, bg_color="#282828", width=10
+    library_btn_frame, "Sortieren", sort_titles, bg_color="#282828", width=10
 ).pack(side=tk.LEFT, padx=2)
 create_button(
-    library_btn_frame, "Favorite", toggle_favorite, bg_color="#282828", width=10
+    library_btn_frame, "Favoritisieren", toggle_favorite, bg_color="#282828", width=10
 ).pack(side=tk.LEFT, padx=2)
 
 # Playlist action buttons
