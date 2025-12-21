@@ -1,7 +1,11 @@
-import json
 import pytest
+import json
+import tempfile
+import os
 from src.core.library import Library
 from src.core.title import Title
+from src.core.playlist import Playlist
+from src.core.playlist_manager import PlaylistManager
 
 
 @pytest.fixture
@@ -80,6 +84,45 @@ def sample_titles():
             genre="Grunge",
         ),
     ]
+
+
+@pytest.fixture
+def temp_playlist_file():
+    """Create a temporary file for testing and clean up after."""
+    temp_file = tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".json")
+    temp_file.close()
+    temp_filepath = temp_file.name
+
+    yield temp_filepath
+
+    # Cleanup
+    if os.path.exists(temp_filepath):
+        os.unlink(temp_filepath)
+
+
+@pytest.fixture
+def playlist_manager(temp_playlist_file):
+    """Create a PlaylistManager instance for testing."""
+    return PlaylistManager(filepath=temp_playlist_file)
+
+
+@pytest.fixture
+def playlist_with_tracks(playlist_manager):
+    """Create a playlist with some tracks already added."""
+    playlist = playlist_manager.create_playlist("Test Playlist", "Test Description")
+    playlist_manager.add_track(playlist["id"], 1)
+    playlist_manager.add_track(playlist["id"], 2)
+    playlist_manager.add_track(playlist["id"], 3)
+    return playlist
+
+
+@pytest.fixture
+def multiple_playlists(playlist_manager):
+    """Create multiple playlists for testing."""
+    playlist1 = playlist_manager.create_playlist("First", "First Description")
+    playlist2 = playlist_manager.create_playlist("Second", "Second Description")
+    playlist3 = playlist_manager.create_playlist("Third", "Third Description")
+    return [playlist1, playlist2, playlist3]
 
 
 def read_json(path):
@@ -163,3 +206,51 @@ class TestIntegration:
         result = empty_library.add_title(new_title)
 
         assert result["id"] == 4, "Neue ID sollte max(existing_ids) + 1 sein"
+
+
+class TestIntegrationPlaylist:
+    """Integration tests for complete workflows."""
+
+    def test_full_workflow(self, playlist_manager):
+        """Test a complete workflow of playlist operations."""
+        # Create playlist
+        playlist = playlist_manager.create_playlist("My Playlist", "Description")
+        assert playlist["id"] == 1
+
+        # Add tracks
+        playlist_manager.add_track(playlist["id"], 1)
+        playlist_manager.add_track(playlist["id"], 2)
+        playlist_manager.add_track(playlist["id"], 3)
+
+        # Verify tracks
+        result = playlist_manager.get_playlist(playlist["id"])
+        assert len(result["title_ids"]) == 3
+
+        # Remove a track
+        playlist_manager.remove_track(playlist["id"], 2)
+        result = playlist_manager.get_playlist(playlist["id"])
+        assert result["title_ids"] == [1, 3]
+
+        # Update playlist
+        playlist_manager.update_playlist(playlist["id"], name="Updated Name")
+        result = playlist_manager.get_playlist(playlist["id"])
+        assert result["name"] == "Updated Name"
+
+        # Delete playlist
+        playlist_manager.delete_playlist(playlist["id"])
+        assert len(playlist_manager.get_all_playlists()) == 0
+
+    def test_multiple_playlists_with_same_tracks(self, playlist_manager):
+        """Test that multiple playlists can reference the same tracks."""
+        playlist1 = playlist_manager.create_playlist("Playlist 1")
+        playlist2 = playlist_manager.create_playlist("Playlist 2")
+
+        # Add same track to both playlists
+        playlist_manager.add_track(playlist1["id"], 1)
+        playlist_manager.add_track(playlist2["id"], 1)
+
+        result1 = playlist_manager.get_playlist(playlist1["id"])
+        result2 = playlist_manager.get_playlist(playlist2["id"])
+
+        assert result1["title_ids"] == [1]
+        assert result2["title_ids"] == [1]
