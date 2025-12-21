@@ -5,7 +5,7 @@ PYTHON := $(or \
 )
 
 run:
-	PYTHONPATH=. $(PYTHON) src/gui/gui.py
+	PYTHONPATH=. $(PYTHON) src/gui/main.py
 
 # Standard-Test
 test:
