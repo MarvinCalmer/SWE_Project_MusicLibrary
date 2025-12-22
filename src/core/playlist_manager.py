@@ -252,3 +252,84 @@ class PlaylistManager:
         data = [p.to_dict() for p in self.playlists]
         with open(self.filepath, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4, ensure_ascii=False)
+
+    def export_playlist(self, playlist_id: int, export_path: str) -> bool:
+        """
+        Export a single playlist to a JSON file.
+
+        Parameters
+        ----------
+        playlist_id : int
+            ID of the playlist to export.
+        export_path : str
+            Path where the playlist should be exported.
+
+        Returns
+        -------
+        bool
+            True if export was successful.
+
+        Raises
+        ------
+        ValueError
+            If playlist with given ID is not found.
+        """
+        index = self._find_index_by_id(playlist_id)
+
+        if index is None:
+            raise ValueError(f"Playlist with ID {playlist_id} not found")
+
+        playlist_data = self.playlists[index].to_dict()
+
+        with open(export_path, "w", encoding="utf-8") as f:
+            json.dump(playlist_data, f, indent=4, ensure_ascii=False)
+
+        return True
+
+    def import_playlist(self, import_path: str) -> dict:
+        """
+        Import a playlist from a JSON file.
+
+        Parameters
+        ----------
+        import_path : str
+            Path to the JSON file containing the playlist.
+
+        Returns
+        -------
+        dict
+            Dictionary representation of the imported playlist.
+
+        Raises
+        ------
+        ValueError
+            If file cannot be read or contains invalid data.
+        """
+        try:
+            with open(import_path, "r", encoding="utf-8") as f:
+                playlist_data = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            raise ValueError(f"Could not read playlist file: {e}")
+
+        # Validate that required fields exist
+        if not isinstance(playlist_data, dict):
+            raise ValueError("Invalid playlist format")
+
+        # Create new playlist with imported data (generate new ID)
+        playlist = Playlist(
+            id=None,  # Will be auto-assigned
+            name=playlist_data.get("name", "Imported Playlist"),
+            description=playlist_data.get("description", ""),
+            title_ids=playlist_data.get("title_ids", []),
+        )
+
+        # Auto-assign ID
+        if self.playlists:
+            playlist.id = max(p.id for p in self.playlists) + 1
+        else:
+            playlist.id = 1
+
+        self.playlists.append(playlist)
+        self._save_file()
+
+        return playlist.to_dict()
