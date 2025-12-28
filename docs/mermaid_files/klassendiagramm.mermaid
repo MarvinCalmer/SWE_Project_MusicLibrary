@@ -1,0 +1,75 @@
+classDiagram
+    class AbstractLibrary {
+        <<abstract>>
+        +get_titles() List~Title~
+        +get_titles_by_id(index: int) Title
+        +search_library(**kwargs) Dict
+        +load() Dict
+        +add_title(title: Title) Dict
+        +update_title(title_id: int, **kwargs) Dict
+        +delete_title(title_id: int) Dict
+    }
+
+    class Library {
+        -filepath: Path
+        -titles: List~Title~
+        +__init__(filepath: str)
+        +get_titles() List~Title~
+        +get_titles_by_id(index: int) Title
+        +search_library(**kwargs) List~Dict~
+        +load() List~Title~
+        +add_title(title: Title) Dict
+        +update_title(title_id: int, **kwargs) Dict
+        +delete_title(title_id: int) Dict
+        +toggle_favorite(title_id: int) bool
+        +get_favorites() List~Title~
+        -_find_index_by_id(title_id: int) int
+        -_load_file() List
+        -_save_file(data: List)
+        -_refresh_titles_from_data(data: List)
+    }
+
+    class Title {
+        +id: int
+        +name: str
+        +artist: str
+        +album: str
+        +year: int
+        +genre: str
+        +is_favorite: bool
+        +__init__(id, name, artist, album, year, genre, is_favorite)
+        +to_dict() Dict
+    }
+
+    class PlaylistManager {
+        -filepath: Path
+        -playlists: List~Playlist~
+        +__init__(filepath: str)
+        +load() List~Playlist~
+        +create_playlist(name: str, description: str) Dict
+        +delete_playlist(playlist_id: int) Dict
+        +add_track(playlist_id: int, title_id: int) Dict
+        +remove_track(playlist_id: int, title_id: int) Dict
+        +get_playlist(playlist_id: int) Dict
+        +get_all_playlists() List~Dict~
+        +update_playlist(playlist_id: int, **kwargs) Dict
+        +export_playlist(playlist_id: int, export_path: str) bool
+        +import_playlist(import_path: str) Dict
+        -_find_index_by_id(playlist_id: int) int
+        -_load_file() List
+        -_save_file()
+    }
+
+    class Playlist {
+        +id: int
+        +name: str
+        +description: str
+        +title_ids: List~int~
+        +__init__(id, name, description, title_ids)
+        +to_dict() Dict
+    }
+
+    AbstractLibrary <|-- Library : implements
+    Library "1" *-- "0..*" Title : contains
+    PlaylistManager "1" *-- "0..*" Playlist : manages
+    Playlist "1" o-- "0..*" Title : references by ID

@@ -1,0 +1,31 @@
+sequenceDiagram
+    actor User
+    participant Main
+    participant PM as PlaylistManager
+    participant P as Playlist
+    participant File as JSON File
+
+    User->>Main: Playlist erstellen
+    Main->>PM: create_playlist(name, description)
+    
+    PM->>P: new Playlist(name, description)
+    activate P
+    P-->>PM: playlist object
+    deactivate P
+    
+    PM->>PM: Berechne nächste ID
+    Note over PM: ID = max(existing IDs) + 1<br/>oder 1 wenn keine existieren
+    
+    PM->>P: playlist.id = calculated_id
+    PM->>PM: playlists.append(playlist)
+    
+    PM->>PM: _save_file()
+    activate PM
+    PM->>P: to_dict()
+    P-->>PM: playlist_dict
+    PM->>File: json.dump(playlists_data)
+    File-->>PM: Erfolg
+    deactivate PM
+    
+    PM-->>Main: playlist_dict
+    Main-->>User: Bestätigung & Playlist-Details
