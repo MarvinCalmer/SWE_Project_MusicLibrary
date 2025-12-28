@@ -1,0 +1,29 @@
+sequenceDiagram
+    actor User
+    participant Main
+    participant PM as PlaylistManager
+    participant P as Playlist
+    participant File as Export JSON File
+
+    User->>Main: Playlist exportieren
+    Main->>PM: export_playlist(playlist_id, export_path)
+    
+    PM->>PM: _find_index_by_id(playlist_id)
+    
+    alt Playlist gefunden
+        PM->>PM: index = found_index
+        PM->>P: playlists[index].to_dict()
+        P-->>PM: playlist_data
+        
+        PM->>File: open(export_path, "w")
+        activate File
+        PM->>File: json.dump(playlist_data)
+        File-->>PM: Erfolg
+        deactivate File
+        
+        PM-->>Main: True
+        Main-->>User: Export erfolgreich
+    else Playlist nicht gefunden
+        PM-->>Main: ValueError
+        Main-->>User: Fehler: Playlist nicht gefunden
+    end

@@ -1,0 +1,51 @@
+sequenceDiagram
+    actor User
+    participant Main
+    participant PM as PlaylistManager
+    participant File as Import JSON File
+    participant P as Playlist
+
+    User->>Main: Playlist importieren
+    Main->>PM: import_playlist(import_path)
+    
+    PM->>File: open(import_path, "r")
+    activate File
+    
+    alt Datei erfolgreich gelesen
+        File->>PM: playlist_data (JSON)
+        deactivate File
+        
+        PM->>PM: Validiere playlist_data
+        Note over PM: Prüfe ob dict<br/>und Felder vorhanden
+        
+        alt Daten gültig
+            PM->>P: new Playlist(name, description, title_ids)
+            activate P
+            P-->>PM: playlist object
+            deactivate P
+            
+            PM->>PM: Berechne neue ID
+            Note over PM: ID = max(existing IDs) + 1<br/>oder 1 wenn keine existieren
+            
+            PM->>P: playlist.id = calculated_id
+            PM->>PM: playlists.append(playlist)
+            
+            PM->>PM: _save_file()
+            activate PM
+            Note over PM: Speichert alle Playlists<br/>in playlists.json
+            deactivate PM
+            
+            PM->>P: to_dict()
+            P-->>PM: playlist_dict
+            PM-->>Main: playlist_dict
+            Main-->>User: Import erfolgreich
+        else Ungültige Daten
+            PM-->>Main: ValueError: Invalid format
+            Main-->>User: Fehler: Ungültiges Format
+        end
+    else Datei nicht gefunden / JSON-Fehler
+        File-->>PM: FileNotFoundError / JSONDecodeError
+        deactivate File
+        PM-->>Main: ValueError: Could not read file
+        Main-->>User: Fehler: Datei nicht lesbar
+    end

@@ -1,0 +1,75 @@
+```mermaid
+flowchart TB
+    %% Akteure
+    User([User/Actor])
+    DataMgmt[(Data Management<br/>Actor)]
+    
+    %% System Box
+    subgraph MusicLibrary[Music Library System]
+        direction TB
+        
+        subgraph TitleUseCases[Title Management]
+            Inspect[Inspect Titles in Listbox]
+            Search[Search Titles]
+            Sort[Sort Titles]
+            AddTitle[Add Title]
+            EditTitle[Edit Title]
+            DeleteTitle[Delete Title]
+        end
+        
+        subgraph PlaylistUseCases[Playlist Management]
+            CreatePlaylist[Create Playlist]
+            EditPlaylist[Edit Playlist]
+            DeletePlaylist[Delete Playlist]
+            AddTrack[Add Track to Playlist]
+            RemoveTrack[Remove Track from Playlist]
+            ViewTracks[View Playlist Tracks]
+            ExportPlaylist[Export Playlist]
+            ImportPlaylist[Import Playlist]
+        end
+    end
+    
+    %% User zu Title Use Cases
+    User --> Inspect
+    User --> AddTitle
+    User --> EditTitle
+    User --> DeleteTitle
+    
+    %% User zu Playlist Use Cases
+    User --> CreatePlaylist
+    User --> EditPlaylist
+    User --> DeletePlaylist
+    User --> AddTrack
+    User --> RemoveTrack
+    User --> ViewTracks
+    User --> ExportPlaylist
+    User --> ImportPlaylist
+    
+    %% Include Beziehungen
+    Inspect -.include.-> Search
+    Inspect -.include.-> Sort
+    
+    %% Data Management Verbindungen
+    Inspect -.fetch/store data.-> DataMgmt
+    AddTitle -.fetch/store data.-> DataMgmt
+    EditTitle -.fetch/store data.-> DataMgmt
+    DeleteTitle -.fetch/store data.-> DataMgmt
+    CreatePlaylist -.fetch/store data.-> DataMgmt
+    EditPlaylist -.fetch/store data.-> DataMgmt
+    DeletePlaylist -.fetch/store data.-> DataMgmt
+    AddTrack -.fetch/store data.-> DataMgmt
+    RemoveTrack -.fetch/store data.-> DataMgmt
+    ViewTracks -.fetch/store data.-> DataMgmt
+    ExportPlaylist -.fetch/store data.-> DataMgmt
+    ImportPlaylist -.fetch/store data.-> DataMgmt
+    
+    %% Styling
+    classDef actorStyle fill:#fff,stroke:#333,stroke-width:3px
+    classDef useCaseStyle fill:#e1f5ff,stroke:#333,stroke-width:2px
+    classDef systemStyle fill:#f9f9f9,stroke:#333,stroke-width:3px
+    
+    class User,DataMgmt actorStyle
+    class Inspect,Search,Sort,AddTitle,EditTitle,DeleteTitle,CreatePlaylist,EditPlaylist,DeletePlaylist,AddTrack,RemoveTrack,ViewTracks,ExportPlaylist,ImportPlaylist useCaseStyle
+```
+
+**Precondition:** User already started application and Data is available
