@@ -1,5 +1,16 @@
-- uses: astral-sh/ruff-action@v3
-  with:
-    version: 0.8.0
-    args: check --select B
-    src: "./src"
+name: Ruff
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/ruff-action@v3
+        with:
+          version: "0.8.0"
+          args: check --select B ./src
