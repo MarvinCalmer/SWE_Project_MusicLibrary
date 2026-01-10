@@ -131,7 +131,7 @@ style.map(
 
 library_tree = ttk.Treeview(
     library_tree_frame,
-    columns=("title", "artist", "album", "year", "genre"),
+    columns=("title", "artist", "album", "year", "genre", "rating"),
     show="tree headings",
     style="Library.Treeview",
     selectmode="browse",
@@ -142,6 +142,7 @@ library_tree.heading("artist", text="Künstler")
 library_tree.heading("album", text="Album")
 library_tree.heading("year", text="Jahr")
 library_tree.heading("genre", text="Genre")
+library_tree.heading("rating", text="Bewertung")
 
 library_tree.column("#0", width=0, stretch=False)
 library_tree.column("title", width=200, anchor="w")
@@ -149,6 +150,7 @@ library_tree.column("artist", width=150, anchor="w")
 library_tree.column("album", width=150, anchor="w")
 library_tree.column("year", width=60, anchor="center")
 library_tree.column("genre", width=100, anchor="w")
+library_tree.column("rating", width=80, anchor="center")
 
 library_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
@@ -262,10 +264,11 @@ def refresh_library_tree(titles=None):
 
     for t in titles:
         favorite_mark = "⭐ " if t.is_favorite else ""
+        rating_display = "★" * t.rating if isinstance(t.rating, int) and t.rating > 0 else "-"
         library_tree.insert(
             "",
             "end",
-            values=(f"{favorite_mark}{t.name}", t.artist, t.album, t.year, t.genre),
+            values=(f"{favorite_mark}{t.name}", t.artist, t.album, t.year, t.genre, rating_display),
             tags=(t.id,),
         )
 
@@ -368,8 +371,16 @@ def add_title():
     year = simpledialog.askinteger("Titel hinzufügen", "Jahr:")
     genre = simpledialog.askstring("Titel hinzufügen", "Genre:")
 
+    rating = simpledialog.askinteger("Titel hinzufügen", "Bewertung (1-5):", minvalue=1, maxvalue=5)
+
     new_title = Title(
-        id=None, name=name, artist=artist, album=album, year=year, genre=genre
+        id=None,
+        name=name,
+        artist=artist,
+        album=album,
+        year=year,
+        genre=genre,
+        rating=rating,
     )
     library.add_title(new_title)
     refresh_library_tree()
@@ -402,9 +413,18 @@ def edit_title():
     genre = simpledialog.askstring(
         "Titel bearbeiten", "Neues Genre:", initialvalue=title.genre
     )
+    rating = simpledialog.askinteger(
+        "Titel bearbeiten", "Bewertung (1-5):", initialvalue=title.rating, minvalue=1, maxvalue=5
+    )
 
     library.update_title(
-        title.id, name=name, artist=artist, album=album, year=year, genre=genre
+        title.id,
+        name=name,
+        artist=artist,
+        album=album,
+        year=year,
+        genre=genre,
+        rating=rating,
     )
     refresh_library_tree()
     if current_playlist_id[0] is not None:

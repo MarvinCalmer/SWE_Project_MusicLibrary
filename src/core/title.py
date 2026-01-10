@@ -30,7 +30,15 @@ class Title:
     genre: str
 
     def __init__(
-        self, id=None, name="", artist="", album="", year=0, genre="", is_favorite=False
+        self,
+        id=None,
+        name="",
+        artist="",
+        album="",
+        year=0,
+        genre="",
+        is_favorite=False,
+        rating=None,
     ):
         """
         Initialize a Title instance.
@@ -49,6 +57,8 @@ class Title:
             Release or publication year.
         genre : str, optional
             Genre classification.
+        rating : int or None, optional
+            User rating for the title (1-5) or None if not rated.
         """
         self.id = id
         self.name = name
@@ -57,6 +67,14 @@ class Title:
         self.year = year
         self.genre = genre
         self.is_favorite = is_favorite
+
+        # Validate rating
+        if rating is None:
+            self.rating = None
+        elif isinstance(rating, int) and 1 <= rating <= 5:
+            self.rating = rating
+        else:
+            raise ValueError("rating must be an integer between 1 and 5, or None")
 
     def to_dict(self):
         """
@@ -75,4 +93,5 @@ class Title:
             "year": self.year,
             "genre": self.genre,
             "is_favorite": self.is_favorite,
+            "rating": self.rating,
         }

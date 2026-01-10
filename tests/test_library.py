@@ -1,4 +1,5 @@
 import json
+import pytest
 from src.core.library import Library
 from src.core.title import Title
 
@@ -89,13 +90,15 @@ def test_add_title(tmp_path):
 
     # Rückgabewert prüfen
     assert isinstance(result, dict)
-    assert len(result) == 7
+    assert "rating" in result
+    assert result["rating"] is None
 
     # JSON-Inhalt prüfen
     data = get_JSON(file_path)
     assert isinstance(data, list)
     assert len(data) == 1
     assert data[0]["name"] == "Imagine"
+    assert data[0].get("rating") is None
 
     # Titel-Liste prüfen
     assert isinstance(lib.titles, list)
@@ -380,24 +383,52 @@ def test_title_default_not_favorite(tmp_path):
     stored_title = lib.get_titles()[0]
     assert stored_title.is_favorite is False
 
-    def test_toggle_favorite_sets_favorite(tmp_path):
-        file_path = tmp_path / "lib.json"
-        lib = Library(filepath=file_path)
-        lib.load()
 
-        t = Title(
-            name="Imagine",
-            artist="John Lennon",
-            album="Imagine",
-            year=1971,
-            genre="Rock",
-        )
-        result = lib.add_title(t)
 
-        new_status = lib.toggle_favorite(result["id"])
+def test_set_and_persist_rating(tmp_path):
+    file_path = tmp_path / "lib.json"
+    lib = Library(filepath=file_path)
+    lib.load()
 
-        assert new_status is True
-        assert lib.get_titles()[0].is_favorite is True
+    t = Title(
+        name="Song A",
+        artist="Artist A",
+        album="Album A",
+        year=2000,
+        genre="Pop",
+        rating=4,
+    )
+    lib.add_title(t)
+
+    data = get_JSON(file_path)
+    assert data[0]["rating"] == 4
+
+    # Re-load library from file and check rating persisted
+    lib2 = Library(filepath=file_path)
+    lib2.load()
+
+    assert lib2.get_titles()[0].rating == 4
+
+
+def test_invalid_rating_raises(tmp_path):
+    file_path = tmp_path / "lib.json"
+    lib = Library(filepath=file_path)
+    lib.load()
+
+    t = Title(
+        name="Song",
+        artist="A",
+        album="B",
+        year=2001,
+        genre="Pop",
+    )
+    lib.add_title(t)
+
+    with pytest.raises(ValueError):
+        lib.update_title(1, rating=6)
+
+    with pytest.raises(ValueError):
+        Title(name="X", artist="Y", album="", year=0, genre="", rating=0)
 
     def test_toggle_favorite_unsets_favorite(tmp_path):
         file_path = tmp_path / "lib.json"

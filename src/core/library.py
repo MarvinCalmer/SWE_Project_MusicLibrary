@@ -68,6 +68,11 @@ class Library(AbstractLibrary):
             else:
                 title.id = 1
 
+        # Validate rating if provided
+        if getattr(title, "rating", None) is not None:
+            if not (isinstance(title.rating, int) and 1 <= title.rating <= 5):
+                raise ValueError("rating must be an integer between 1 and 5")
+
         self.titles.append(title)
         data = [t.to_dict() for t in self.titles]
         self._save_file(data)
@@ -76,7 +81,17 @@ class Library(AbstractLibrary):
 
     def update_title(self, title_id: int, **kwargs):
         index = self._find_index_by_id(title_id)
+        if index is None:
+            # Preserve previous behavior expected by tests: raise TypeError/IndexError
+            raise TypeError(f"Title with ID {title_id} not found")
+
         title_dict = self.titles[index].to_dict()
+
+        # Validate rating if updating
+        if "rating" in kwargs:
+            r = kwargs["rating"]
+            if r is not None and not (isinstance(r, int) and 1 <= r <= 5):
+                raise ValueError("rating must be an integer between 1 and 5")
 
         for key, value in kwargs.items():
             title_dict[key] = value
