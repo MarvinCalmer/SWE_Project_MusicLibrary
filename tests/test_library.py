@@ -410,6 +410,31 @@ def test_set_and_persist_rating(tmp_path):
     assert lib2.get_titles()[0].rating == 4
 
 
+def test_clear_rating_updates(tmp_path):
+    file_path = tmp_path / "lib.json"
+    lib = Library(filepath=file_path)
+    lib.load()
+
+    t = Title(
+        name="Song B",
+        artist="Artist B",
+        album="Album B",
+        year=2001,
+        genre="Rock",
+        rating=5,
+    )
+    lib.add_title(t)
+
+    lib.update_title(1, rating=None)
+
+    data = get_JSON(file_path)
+    assert data[0].get("rating") is None
+
+    lib2 = Library(filepath=file_path)
+    lib2.load()
+    assert lib2.get_titles()[0].rating is None
+
+
 def test_invalid_rating_raises(tmp_path):
     file_path = tmp_path / "lib.json"
     lib = Library(filepath=file_path)

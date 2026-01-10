@@ -384,7 +384,29 @@ def add_title():
     year = simpledialog.askinteger("Titel hinzufügen", "Jahr:")
     genre = simpledialog.askstring("Titel hinzufügen", "Genre:")
 
-    rating = simpledialog.askinteger("Titel hinzufügen", "Bewertung (1-5):", minvalue=1, maxvalue=5)
+    rating_input = simpledialog.askstring(
+        "Titel hinzufügen",
+        "Bewertung (1-5) (oder '-' zum Entfernen):",
+        initialvalue="",
+    )
+
+    if rating_input is None:
+        rating = None
+    else:
+        rating_input = rating_input.strip()
+        if rating_input == "-":
+            rating = None
+        else:
+            try:
+                rating = int(rating_input)
+                if not 1 <= rating <= 5:
+                    raise ValueError
+            except Exception:
+                messagebox.showerror(
+                    "Fehler",
+                    "Ungültige Bewertung. Bitte eine Zahl zwischen 1 und 5 eingeben oder '-' zum Entfernen.",
+                )
+                return
 
     new_title = Title(
         id=None,
@@ -426,9 +448,30 @@ def edit_title():
     genre = simpledialog.askstring(
         "Titel bearbeiten", "Neues Genre:", initialvalue=title.genre
     )
-    rating = simpledialog.askinteger(
-        "Titel bearbeiten", "Bewertung (1-5):", initialvalue=title.rating, minvalue=1, maxvalue=5
+    rating_input = simpledialog.askstring(
+        "Titel bearbeiten",
+        "Bewertung (1-5) (oder '-' zum Entfernen):",
+        initialvalue=str(title.rating) if title.rating is not None else "",
     )
+
+    if rating_input is None:
+        # User cancelled - keep existing rating
+        rating = title.rating
+    else:
+        rating_input = rating_input.strip()
+        if rating_input == "-":
+            rating = None
+        else:
+            try:
+                rating = int(rating_input)
+                if not 1 <= rating <= 5:
+                    raise ValueError
+            except Exception:
+                messagebox.showerror(
+                    "Fehler",
+                    "Ungültige Bewertung. Bitte eine Zahl zwischen 1 und 5 eingeben oder '-' zum Entfernen.",
+                )
+                return
 
     library.update_title(
         title.id,
@@ -494,20 +537,33 @@ def set_rating():
     index = library._find_index_by_id(title_id)
     title = library.get_titles_by_id(index)
 
-    rating = simpledialog.askinteger(
+    rating_input = simpledialog.askstring(
         "Bewertung",
-        "Bewertung (1-5):",
-        initialvalue=title.rating,
-        minvalue=1,
-        maxvalue=5,
+        "Bewertung (1-5) (oder '-' zum Entfernen):",
+        initialvalue=str(title.rating) if title.rating is not None else "",
     )
 
     # If user cancelled
-    if rating is None:
+    if rating_input is None:
         return
 
+    rating_input = rating_input.strip()
+    if rating_input == "-":
+        new_rating = None
+    else:
+        try:
+            new_rating = int(rating_input)
+            if not 1 <= new_rating <= 5:
+                raise ValueError
+        except Exception:
+            messagebox.showerror(
+                "Fehler",
+                "Ungültige Bewertung. Bitte eine Zahl zwischen 1 und 5 eingeben oder '-' zum Entfernen.",
+            )
+            return
+
     try:
-        library.update_title(title.id, rating=rating)
+        library.update_title(title.id, rating=new_rating)
         refresh_library_tree()
     except ValueError as e:
         messagebox.showerror("Fehler", str(e))
