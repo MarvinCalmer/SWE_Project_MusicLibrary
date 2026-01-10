@@ -22,10 +22,10 @@ main_container.pack(fill=tk.BOTH, expand=True)
 main_container.grid_rowconfigure(0, weight=1)
 main_container.grid_columnconfigure(0, weight=0)  # Playlist sidebar
 main_container.grid_columnconfigure(1, weight=1)  # Song library
-main_container.grid_columnconfigure(2, weight=1)  # Playlist songs
+main_container.grid_columnconfigure(2, weight=0)  # Playlist songs (narrower)
 
 # ============ LEFT SIDEBAR - PLAYLISTS ============
-playlist_sidebar = tk.Frame(main_container, bg="#000000", width=250)
+playlist_sidebar = tk.Frame(main_container, bg="#000000", width=180)
 playlist_sidebar.grid(row=0, column=0, sticky="nsew")
 playlist_sidebar.grid_propagate(False)
 
@@ -131,7 +131,7 @@ style.map(
 
 library_tree = ttk.Treeview(
     library_tree_frame,
-    columns=("title", "artist", "album", "year", "genre"),
+    columns=("title", "artist", "album", "year", "genre", "rating"),
     show="tree headings",
     style="Library.Treeview",
     selectmode="browse",
@@ -142,13 +142,15 @@ library_tree.heading("artist", text="Künstler")
 library_tree.heading("album", text="Album")
 library_tree.heading("year", text="Jahr")
 library_tree.heading("genre", text="Genre")
+library_tree.heading("rating", text="Bewertung")
 
 library_tree.column("#0", width=0, stretch=False)
-library_tree.column("title", width=200, anchor="w")
-library_tree.column("artist", width=150, anchor="w")
-library_tree.column("album", width=150, anchor="w")
+library_tree.column("title", width=180, anchor="w")
+library_tree.column("artist", width=120, anchor="w")
+library_tree.column("album", width=120, anchor="w")
 library_tree.column("year", width=60, anchor="center")
-library_tree.column("genre", width=100, anchor="w")
+library_tree.column("genre", width=90, anchor="w")
+library_tree.column("rating", width=60, anchor="center")
 
 library_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
@@ -157,8 +159,9 @@ library_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 library_tree.config(yscrollcommand=library_scrollbar.set)
 
 # ============ RIGHT - PLAYLIST SONGS ============
-playlist_content = tk.Frame(main_container, bg="#121212")
+playlist_content = tk.Frame(main_container, bg="#121212", width=240)
 playlist_content.grid(row=0, column=2, sticky="nsew", padx=10, pady=10)
+playlist_content.grid_propagate(False)
 
 # Playlist header
 playlist_header = tk.Frame(playlist_content, bg="#121212")
@@ -202,9 +205,9 @@ playlist_tree.heading("year", text="Jahr")
 
 playlist_tree.column("#0", width=0, stretch=False)
 playlist_tree.column("number", width=40, anchor="center")
-playlist_tree.column("title", width=200, anchor="w")
-playlist_tree.column("artist", width=150, anchor="w")
-playlist_tree.column("album", width=150, anchor="w")
+playlist_tree.column("title", width=160, anchor="w")
+playlist_tree.column("artist", width=120, anchor="w")
+playlist_tree.column("album", width=120, anchor="w")
 playlist_tree.column("year", width=60, anchor="center")
 
 playlist_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
@@ -233,6 +236,8 @@ def create_button(parent, text, command, bg_color="#1DB954", width=None):
     else:  # Dark gray (#282828)
         active_bg = "#3A3A3A"
 
+    # Use smaller padding for a compact layout
+    default_width = 8
     btn = tk.Button(
         parent,
         text=text,
@@ -241,13 +246,15 @@ def create_button(parent, text, command, bg_color="#1DB954", width=None):
         fg=text_color,
         font=("Arial", 9, "bold"),
         borderwidth=0,
-        padx=15,
-        pady=6,
+        padx=10,
+        pady=4,
         cursor="hand2",
         activebackground=active_bg,
         activeforeground=text_color,
     )
-    if width:
+    if width is None:
+        btn.config(width=default_width)
+    else:
         btn.config(width=width)
     return btn
 
@@ -261,11 +268,12 @@ def refresh_library_tree(titles=None):
         titles = library.get_titles()
 
     for t in titles:
-        favorite_mark = "⭐ " if t.is_favorite else ""
+        favorite_mark = "❤️ " if t.is_favorite else ""
+        rating_display = "★" * t.rating if isinstance(t.rating, int) and t.rating > 0 else "-"
         library_tree.insert(
             "",
             "end",
-            values=(f"{favorite_mark}{t.name}", t.artist, t.album, t.year, t.genre),
+            values=(f"{favorite_mark}{t.name}", t.artist, t.album, t.year, t.genre, rating_display),
             tags=(t.id,),
         )
 
@@ -327,7 +335,15 @@ def get_selected_title_id_from_library():
     item = selection[0]
     # Find the title by matching the displayed data
     values = library_tree.item(item)["values"]
-    title_name = values[0].replace("⭐ ", "")
+    name_field = values[0]
+
+    # Remove favorite markers if present (star, heart, red heart variants)
+    for prefix in ("⭐ ", "♥ ", "❤️ "):
+        if name_field.startswith(prefix):
+            name_field = name_field[len(prefix) :]
+            break
+
+    title_name = name_field
     artist = values[1]
 
     # Find matching title in library
@@ -368,8 +384,38 @@ def add_title():
     year = simpledialog.askinteger("Titel hinzufügen", "Jahr:")
     genre = simpledialog.askstring("Titel hinzufügen", "Genre:")
 
+    rating_input = simpledialog.askstring(
+        "Titel hinzufügen",
+        "Bewertung (1-5) (oder '-' zum Entfernen):",
+        initialvalue="",
+    )
+
+    if rating_input is None:
+        rating = None
+    else:
+        rating_input = rating_input.strip()
+        if rating_input == "-":
+            rating = None
+        else:
+            try:
+                rating = int(rating_input)
+                if not 1 <= rating <= 5:
+                    raise ValueError
+            except Exception:
+                messagebox.showerror(
+                    "Fehler",
+                    "Ungültige Bewertung. Bitte eine Zahl zwischen 1 und 5 eingeben oder '-' zum Entfernen.",
+                )
+                return
+
     new_title = Title(
-        id=None, name=name, artist=artist, album=album, year=year, genre=genre
+        id=None,
+        name=name,
+        artist=artist,
+        album=album,
+        year=year,
+        genre=genre,
+        rating=rating,
     )
     library.add_title(new_title)
     refresh_library_tree()
@@ -402,9 +448,39 @@ def edit_title():
     genre = simpledialog.askstring(
         "Titel bearbeiten", "Neues Genre:", initialvalue=title.genre
     )
+    rating_input = simpledialog.askstring(
+        "Titel bearbeiten",
+        "Bewertung (1-5) (oder '-' zum Entfernen):",
+        initialvalue=str(title.rating) if title.rating is not None else "",
+    )
+
+    if rating_input is None:
+        # User cancelled - keep existing rating
+        rating = title.rating
+    else:
+        rating_input = rating_input.strip()
+        if rating_input == "-":
+            rating = None
+        else:
+            try:
+                rating = int(rating_input)
+                if not 1 <= rating <= 5:
+                    raise ValueError
+            except Exception:
+                messagebox.showerror(
+                    "Fehler",
+                    "Ungültige Bewertung. Bitte eine Zahl zwischen 1 und 5 eingeben oder '-' zum Entfernen.",
+                )
+                return
 
     library.update_title(
-        title.id, name=name, artist=artist, album=album, year=year, genre=genre
+        title.id,
+        name=name,
+        artist=artist,
+        album=album,
+        year=year,
+        genre=genre,
+        rating=rating,
     )
     refresh_library_tree()
     if current_playlist_id[0] is not None:
@@ -449,6 +525,48 @@ def toggle_favorite():
 
     library.toggle_favorite(title_id)
     refresh_library_tree()
+
+
+def set_rating():
+    """Set or change the rating (1-5) of the selected title."""
+    title_id = get_selected_title_id_from_library()
+    if title_id is None:
+        messagebox.showwarning("Hinweis", "Bitte einen Titel auswählen.")
+        return
+
+    index = library._find_index_by_id(title_id)
+    title = library.get_titles_by_id(index)
+
+    rating_input = simpledialog.askstring(
+        "Bewertung",
+        "Bewertung (1-5) (oder '-' zum Entfernen):",
+        initialvalue=str(title.rating) if title.rating is not None else "",
+    )
+
+    # If user cancelled
+    if rating_input is None:
+        return
+
+    rating_input = rating_input.strip()
+    if rating_input == "-":
+        new_rating = None
+    else:
+        try:
+            new_rating = int(rating_input)
+            if not 1 <= new_rating <= 5:
+                raise ValueError
+        except Exception:
+            messagebox.showerror(
+                "Fehler",
+                "Ungültige Bewertung. Bitte eine Zahl zwischen 1 und 5 eingeben oder '-' zum Entfernen.",
+            )
+            return
+
+    try:
+        library.update_title(title.id, rating=new_rating)
+        refresh_library_tree()
+    except ValueError as e:
+        messagebox.showerror("Fehler", str(e))
 
 
 # ============ PLAYLIST FUNCTIONS ============
@@ -649,21 +767,24 @@ create_button(
 ).pack(fill=tk.X, pady=2)
 
 # Library buttons
-create_button(library_btn_frame, "Hinzufügen", add_title, width=10).pack(side=tk.LEFT, padx=2)
-create_button(library_btn_frame, "Editieren", edit_title, bg_color="#282828", width=10).pack(
+create_button(library_btn_frame, "Hinzufügen", add_title, width=8).pack(side=tk.LEFT, padx=2)
+create_button(library_btn_frame, "Editieren", edit_title, bg_color="#282828", width=8).pack(
     side=tk.LEFT, padx=2
 )
 create_button(
-    library_btn_frame, "Löschen", delete_title, bg_color="#B91D1D", width=10
+    library_btn_frame, "Löschen", delete_title, bg_color="#B91D1D", width=8
 ).pack(side=tk.LEFT, padx=2)
 create_button(
-    library_btn_frame, "Suchen", search_titles, bg_color="#282828", width=10
+    library_btn_frame, "Suchen", search_titles, bg_color="#282828", width=8
 ).pack(side=tk.LEFT, padx=2)
 create_button(
-    library_btn_frame, "Sortieren", sort_titles, bg_color="#282828", width=10
+    library_btn_frame, "Sortieren", sort_titles, bg_color="#282828", width=8
 ).pack(side=tk.LEFT, padx=2)
 create_button(
-    library_btn_frame, "Favoritisieren", toggle_favorite, bg_color="#282828", width=10
+    library_btn_frame, "Favoritisieren", toggle_favorite, bg_color="#282828", width=8
+).pack(side=tk.LEFT, padx=2)
+create_button(
+    library_btn_frame, "Bewerten", set_rating, bg_color="#282828", width=8
 ).pack(side=tk.LEFT, padx=2)
 
 # Playlist action buttons
