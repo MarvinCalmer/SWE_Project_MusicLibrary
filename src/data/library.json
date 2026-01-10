@@ -7,7 +7,7 @@
         "year": 2017,
         "genre": "Test",
         "is_favorite": false,
-        "rating": 5
+        "rating": 2
     },
     {
         "id": 2,
@@ -16,8 +16,8 @@
         "album": "After Hours",
         "year": 2019,
         "genre": "R&B",
-        "is_favorite": false,
-        "rating": 1
+        "is_favorite": true,
+        "rating": 3
     },
     {
         "id": 3,
@@ -37,7 +37,7 @@
         "year": 2020,
         "genre": "Pop",
         "is_favorite": false,
-        "rating": 2
+        "rating": 1
     },
     {
         "id": 5,
@@ -47,7 +47,7 @@
         "year": 2019,
         "genre": "Pop",
         "is_favorite": false,
-        "rating": null
+        "rating": 1
     },
     {
         "id": 6,
@@ -57,7 +57,7 @@
         "year": 2019,
         "genre": "Hip-Hop",
         "is_favorite": false,
-        "rating": 2
+        "rating": 3
     },
     {
         "id": 7,
@@ -66,7 +66,7 @@
         "album": "The Kids Are Coming",
         "year": 2019,
         "genre": "Pop",
-        "is_favorite": true,
+        "is_favorite": false,
         "rating": null
     },
     {
@@ -107,16 +107,16 @@
         "year": 2025,
         "genre": "Swiss Underground",
         "is_favorite": false,
-        "rating": null
+        "rating": 5
     },
     {
         "id": 12,
-        "name": "tes",
-        "artist": "asd",
-        "album": "asd",
-        "year": 123,
-        "genre": "ad",
-        "is_favorite": false,
-        "rating": null
+        "name": "Liftoff! - Radio Mix",
+        "artist": "CSO",
+        "album": "-",
+        "year": 1997,
+        "genre": "Electronic",
+        "is_favorite": true,
+        "rating": 4
     }
 ]

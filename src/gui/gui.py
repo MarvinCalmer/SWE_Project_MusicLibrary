@@ -38,7 +38,7 @@ def refresh_listbox(titles=None):
     if titles is None:
         titles = library.get_titles()
     for t in titles:
-        favorite_mark = "⭐ " if t.is_favorite else ""
+        favorite_mark = "❤️ " if t.is_favorite else ""
         song_listbox.insert(
             tk.END,
             f"{favorite_mark}{t.name} - {t.artist} ({t.album}, {t.year}) [{t.genre}]",
@@ -169,7 +169,7 @@ tk.Button(button_frame, text="Search", width=12, command=search_titles).grid(
 tk.Button(button_frame, text="Sort", width=12, command=sort_titles).grid(
     row=0, column=4, padx=5
 )
-tk.Button(button_frame, text="⭐ Favorite", width=12, command=toggle_favorite).grid(
+tk.Button(button_frame, text="❤️ Favorite", width=12, command=toggle_favorite).grid(
     row=0, column=5, padx=5
 )
 tk.Button(button_frame, text="Exit", width=12, command=root.destroy).grid(

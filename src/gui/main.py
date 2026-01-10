@@ -268,7 +268,7 @@ def refresh_library_tree(titles=None):
         titles = library.get_titles()
 
     for t in titles:
-        favorite_mark = "⭐ " if t.is_favorite else ""
+        favorite_mark = "❤️ " if t.is_favorite else ""
         rating_display = "★" * t.rating if isinstance(t.rating, int) and t.rating > 0 else "-"
         library_tree.insert(
             "",
@@ -335,7 +335,15 @@ def get_selected_title_id_from_library():
     item = selection[0]
     # Find the title by matching the displayed data
     values = library_tree.item(item)["values"]
-    title_name = values[0].replace("⭐ ", "")
+    name_field = values[0]
+
+    # Remove favorite markers if present (star, heart, red heart variants)
+    for prefix in ("⭐ ", "♥ ", "❤️ "):
+        if name_field.startswith(prefix):
+            name_field = name_field[len(prefix) :]
+            break
+
+    title_name = name_field
     artist = values[1]
 
     # Find matching title in library
