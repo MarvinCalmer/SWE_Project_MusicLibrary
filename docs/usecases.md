@@ -225,3 +225,43 @@ Dieses Dokument beschreibt die wichtigsten Use Cases für die Musik Bibliothek.
 - 3a. Eine oder mehrere Track-IDs existieren nicht mehr in der Library:  
   - System überspringt die fehlenden Tracks und zeigt nur die vorhandenen an
   - Optional: System markiert die Playlist als „unvollständig"
+  
+## User Story – Playlists anzeigen
+Als Benutzer möchte ich die Inhalte einer Playlist anzeigen können,  
+um gezielt nur bestimmte Titel zu sehen.
+
+### Akzeptanzkriterien
+- Der Benutzer kann eine Playlist auswählen.
+- Alle Titel der Playlist werden übersichtlich angezeigt.
+- Leere Playlists werden entsprechend gekennzeichnet.
+- Die Anzeige unterscheidet sich klar von der Gesamtbibliothek.
+
+## User Story – Import der Bibliothek
+Als Benutzer möchte ich eine Bibliothek aus einer Datei importieren können,  
+um bestehende Musikdaten weiterzuverwenden.
+
+### Akzeptanzkriterien
+- Bibliotheksdaten können aus einer JSON- oder CSV-Datei importiert werden.
+- Das Dateiformat wird validiert.
+- Fehlerhafte Dateien führen zu einer verständlichen Fehlermeldung.
+- Gültige Titel werden korrekt in die Bibliothek übernommen.
+
+## User Story – Export der Bibliothek
+Als Benutzer möchte ich meine Bibliothek exportieren können,  
+um ein Backup meiner Musikdaten zu erstellen.
+
+### Akzeptanzkriterien
+- Die Bibliothek kann in eine Datei exportiert werden.
+- Das Exportformat ist eindeutig definiert (z. B. JSON).
+- Die exportierte Datei enthält alle Titel und Metadaten.
+- Der Export verändert die bestehende Bibliothek nicht.
+
+## User Story – Statistikübersicht
+Als Benutzer möchte ich statistische Auswertungen meiner Bibliothek sehen können,  
+um einen Überblick über meine Musiksammlung zu erhalten.
+
+### Akzeptanzkriterien
+- Es werden Statistiken wie Anzahl der Titel pro Genre angezeigt.
+- Der neueste und älteste Titel kann ermittelt werden.
+- Statistiken basieren auf den aktuellen Bibliotheksdaten.
+- Die Statistikansicht verändert keine Daten.
