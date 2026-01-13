@@ -498,5 +498,45 @@
         "genre": "Pop",
         "is_favorite": true,
         "rating": 5
+    },
+    {
+        "id": 51,
+        "name": "Goodbyes",
+        "artist": "Post Malone",
+        "album": "Hollywood's Bleeding",
+        "year": 2019,
+        "genre": "Hip-Hop",
+        "is_favorite": true,
+        "rating": 5
+    },
+    {
+        "id": 52,
+        "name": "Dream On",
+        "artist": "Aerosmith",
+        "album": "Aerosmith",
+        "year": 1973,
+        "genre": "Rock",
+        "is_favorite": false,
+        "rating": 5
+    },
+    {
+        "id": 53,
+        "name": "White Tiger",
+        "artist": "Izzy Bizu",
+        "album": "-",
+        "year": 2016,
+        "genre": "Soul / Pop",
+        "is_favorite": true,
+        "rating": 4
+    },
+    {
+        "id": 54,
+        "name": "Again",
+        "artist": "Fetty Wap",
+        "album": "Fetty Wap",
+        "year": 2015,
+        "genre": "Hip-Hop",
+        "is_favorite": false,
+        "rating": 4
     }
 ]
