@@ -11,6 +11,7 @@ Im Rahmen der Vorlesung Software Technik soll eine Musik Bibliothek erstellt wer
   - [Über das Projekt](#über-das-projekt)
   - [Autoren und Betreuung](#autoren-und-betreuung)
   - [Technologien und Tools](#technologien-und-tools)
+    - [Continuous Integration](#continuous-integration)
   - [KI-Nutzung](#ki-nutzung)
   - [Tool-Nutzung](#tool-nutzung)
   - [Installation und Ausführung](#installation-und-ausführung)
@@ -51,6 +52,9 @@ Liste der wichtigsten verwendeten Technologien, Frameworks und Tools:
 - Frameworks: Pytest
 - Datenspeicherung: JSON
 - Tools: Git, Visual Studio Code, ChatGPT, CoPilot, Draw.io, Ruff
+
+### Continuous Integration
+automatisiertes Unit-Testing und Formatting mittels custom GitHub Actions
 
 ---
 
