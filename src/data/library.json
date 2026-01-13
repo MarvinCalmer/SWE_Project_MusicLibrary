@@ -5,7 +5,7 @@
         "artist": "Ed Sheeran",
         "album": "Divide",
         "year": 2017,
-        "genre": "Test",
+        "genre": "Pop",
         "is_favorite": false,
         "rating": 2
     },
@@ -101,61 +101,61 @@
     },
     {
         "id": 11,
-        "name": "We Are Charlie Kirk",
-        "artist": "Spalexma",
-        "album": "=",
-        "year": 2025,
-        "genre": "Swiss Underground",
-        "is_favorite": false,
-        "rating": 5
+        "name": "Stay",
+        "artist": "The Kid LAROI & Justin Bieber",
+        "album": "-",
+        "year": 2021,
+        "genre": "Pop",
+        "is_favorite": true,
+        "rating": 4
     },
     {
         "id": 12,
-        "name": "Liftoff! - Radio Mix",
-        "artist": "CSO",
-        "album": "-",
-        "year": 1997,
-        "genre": "Electronic",
+        "name": "As It Was",
+        "artist": "Harry Styles",
+        "album": "Harry's House",
+        "year": 2022,
+        "genre": "Pop",
         "is_favorite": true,
-        "rating": 4
+        "rating": 5
     },
     {
         "id": 13,
-        "name": "Goodbyes",
-        "artist": "Post Malone",
-        "album": "Hollywood's Bleeding",
-        "year": 2019,
+        "name": "Sunflower",
+        "artist": "Post Malone & Swae Lee",
+        "album": "-",
+        "year": 2018,
         "genre": "Hip-Hop",
-        "is_favorite": true,
-        "rating": 5
+        "is_favorite": false,
+        "rating": 4
     },
     {
         "id": 14,
-        "name": "Dream On",
-        "artist": "Aerosmith",
-        "album": "Aerosmith",
-        "year": 1973,
-        "genre": "Rock",
-        "is_favorite": false,
-        "rating": 5
-    },
-    {
-        "id": 15,
-        "name": "White Tiger",
-        "artist": "Izzy Bizu",
-        "album": "-",
-        "year": 2016,
-        "genre": "Soul / Pop",
-        "is_favorite": true,
-        "rating": 4
-    },{
-        "id": 16,
-        "name": "Again",
-        "artist": "Fetty Wap",
-        "album": "Fetty Wap",
-        "year": 2015,
+        "name": "Rockstar",
+        "artist": "Post Malone",
+        "album": "Beerbongs & Bentleys",
+        "year": 2018,
         "genre": "Hip-Hop",
         "is_favorite": false,
         "rating": 4
-    }
-]
+    },
+    {
+        "id": 15,
+        "name": "Perfect",
+        "artist": "Ed Sheeran",
+        "album": "Divide",
+        "year": 2017,
+        "genre": "Pop",
+        "is_favorite": true,
+        "rating": 5
+    },
+    {
+        "id": 16,
+        "name": "Believer",
+        "artist": "Imagine Dragons",
+        "album": "Evolve",
+        "year": 2017,
+        "genre": "Rock",
+        "is_favorite": false,
+        "rating": 4
+ 
