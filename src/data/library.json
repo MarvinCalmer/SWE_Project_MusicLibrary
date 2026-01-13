@@ -158,4 +158,345 @@
         "genre": "Rock",
         "is_favorite": false,
         "rating": 4
- 
+    },
+    {
+        "id": 17,
+        "name": "Thunder",
+        "artist": "Imagine Dragons",
+        "album": "Evolve",
+        "year": 2017,
+        "genre": "Rock",
+        "is_favorite": false,
+        "rating": 3
+    },
+    {
+        "id": 18,
+        "name": "Counting Stars",
+        "artist": "OneRepublic",
+        "album": "Native",
+        "year": 2013,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 19,
+        "name": "Radioactive",
+        "artist": "Imagine Dragons",
+        "album": "Night Visions",
+        "year": 2012,
+        "genre": "Rock",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 20,
+        "name": "See You Again",
+        "artist": "Wiz Khalifa",
+        "album": "-",
+        "year": 2015,
+        "genre": "Hip-Hop",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 21,
+        "name": "God's Plan",
+        "artist": "Drake",
+        "album": "Scorpion",
+        "year": 2018,
+        "genre": "Hip-Hop",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 22,
+        "name": "One Dance",
+        "artist": "Drake",
+        "album": "Views",
+        "year": 2016,
+        "genre": "Hip-Hop",
+        "is_favorite": false,
+        "rating": 3
+    },
+    {
+        "id": 23,
+        "name": "Closer",
+        "artist": "The Chainsmokers",
+        "album": "Collage",
+        "year": 2016,
+        "genre": "EDM",
+        "is_favorite": false,
+        "rating": 3
+    },
+    {
+        "id": 24,
+        "name": "Cheap Thrills",
+        "artist": "Sia",
+        "album": "This Is Acting",
+        "year": 2016,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 3
+    },
+    {
+        "id": 25,
+        "name": "Havana",
+        "artist": "Camila Cabello",
+        "album": "Camila",
+        "year": 2017,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 3
+    },
+    {
+        "id": 26,
+        "name": "Despacito",
+        "artist": "Luis Fonsi & Daddy Yankee",
+        "album": "-",
+        "year": 2017,
+        "genre": "Latin",
+        "is_favorite": true,
+        "rating": 5
+    },
+    {
+        "id": 27,
+        "name": "Uptown Funk",
+        "artist": "Mark Ronson ft. Bruno Mars",
+        "album": "Uptown Special",
+        "year": 2014,
+        "genre": "Funk",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 28,
+        "name": "Shallow",
+        "artist": "Lady Gaga & Bradley Cooper",
+        "album": "-",
+        "year": 2018,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 29,
+        "name": "Drivers License",
+        "artist": "Olivia Rodrigo",
+        "album": "SOUR",
+        "year": 2021,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 30,
+        "name": "Flowers",
+        "artist": "Miley Cyrus",
+        "album": "Endless Summer Vacation",
+        "year": 2023,
+        "genre": "Pop",
+        "is_favorite": true,
+        "rating": 4
+    },
+    {
+        "id": 31,
+        "name": "Anti-Hero",
+        "artist": "Taylor Swift",
+        "album": "Midnights",
+        "year": 2022,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 32,
+        "name": "Shake It Off",
+        "artist": "Taylor Swift",
+        "album": "1989",
+        "year": 2014,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 3
+    },
+    {
+        "id": 33,
+        "name": "Peaches",
+        "artist": "Justin Bieber",
+        "album": "Justice",
+        "year": 2021,
+        "genre": "R&B",
+        "is_favorite": false,
+        "rating": 3
+    },
+    {
+        "id": 34,
+        "name": "Old Town Road",
+        "artist": "Lil Nas X",
+        "album": "-",
+        "year": 2019,
+        "genre": "Hip-Hop",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 35,
+        "name": "Montero",
+        "artist": "Lil Nas X",
+        "album": "Montero",
+        "year": 2021,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 3
+    },
+    {
+        "id": 36,
+        "name": "Can't Stop the Feeling!",
+        "artist": "Justin Timberlake",
+        "album": "Trolls",
+        "year": 2016,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 3
+    },
+    {
+        "id": 37,
+        "name": "Roar",
+        "artist": "Katy Perry",
+        "album": "Prism",
+        "year": 2013,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 3
+    },
+    {
+        "id": 38,
+        "name": "All of Me",
+        "artist": "John Legend",
+        "album": "Love in the Future",
+        "year": 2013,
+        "genre": "Soul",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 39,
+        "name": "Wake Me Up",
+        "artist": "Avicii",
+        "album": "True",
+        "year": 2013,
+        "genre": "EDM",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 40,
+        "name": "Happy",
+        "artist": "Pharrell Williams",
+        "album": "-",
+        "year": 2014,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 3
+    },
+    {
+        "id": 41,
+        "name": "Rolling in the Deep",
+        "artist": "Adele",
+        "album": "21",
+        "year": 2011,
+        "genre": "Soul",
+        "is_favorite": false,
+        "rating": 5
+    },
+    {
+        "id": 42,
+        "name": "Hello",
+        "artist": "Adele",
+        "album": "25",
+        "year": 2015,
+        "genre": "Soul",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 43,
+        "name": "Thinking Out Loud",
+        "artist": "Ed Sheeran",
+        "album": "X",
+        "year": 2014,
+        "genre": "Pop",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 44,
+        "name": "Can't Feel My Face",
+        "artist": "The Weeknd",
+        "album": "Beauty Behind the Madness",
+        "year": 2015,
+        "genre": "R&B",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 45,
+        "name": "Starboy",
+        "artist": "The Weeknd",
+        "album": "Starboy",
+        "year": 2016,
+        "genre": "R&B",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 46,
+        "name": "Humble",
+        "artist": "Kendrick Lamar",
+        "album": "DAMN.",
+        "year": 2017,
+        "genre": "Hip-Hop",
+        "is_favorite": false,
+        "rating": 4
+    },
+    {
+        "id": 47,
+        "name": "Lose Yourself",
+        "artist": "Eminem",
+        "album": "8 Mile",
+        "year": 2002,
+        "genre": "Hip-Hop",
+        "is_favorite": false,
+        "rating": 5
+    },
+    {
+        "id": 48,
+        "name": "Numb",
+        "artist": "Linkin Park",
+        "album": "Meteora",
+        "year": 2003,
+        "genre": "Rock",
+        "is_favorite": false,
+        "rating": 5
+    },
+    {
+        "id": 49,
+        "name": "Smells Like Teen Spirit",
+        "artist": "Nirvana",
+        "album": "Nevermind",
+        "year": 1991,
+        "genre": "Rock",
+        "is_favorite": false,
+        "rating": 5
+    },
+    {
+        "id": 50,
+        "name": "Billie Jean",
+        "artist": "Michael Jackson",
+        "album": "Thriller",
+        "year": 1982,
+        "genre": "Pop",
+        "is_favorite": true,
+        "rating": 5
+    }
+]

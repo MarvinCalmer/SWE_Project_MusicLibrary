@@ -1,1 +1,13 @@
 [
+    {
+        "id": 1,
+        "name": "Demo Playlist",
+        "description": "test",
+        "title_ids": [
+            4,
+            9,
+            8,
+            7
+        ]
+    }
+]
