@@ -30,6 +30,7 @@ test-cov-html:
 
 install:
 	pip3 install pytest
+	pip3 install ruff
 
 # 4) Aufräumen: pyc-Dateien & __pycache__ löschen
 clean:
